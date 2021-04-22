@@ -1,0 +1,8 @@
+*
+!com.appalachia.python.common_py
+!requirements.txt
+*.pyc
+*.log.*
+*.log
+__pycache__
+*.csv
