@@ -1,5 +1,5 @@
 *
-!com.appalachia.python.common_py
+!appapy
 !requirements.txt
 *.pyc
 *.log.*

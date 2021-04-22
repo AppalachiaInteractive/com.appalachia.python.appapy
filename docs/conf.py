@@ -19,7 +19,7 @@ import datetime
 
 # -- Project information -----------------------------------------------------
 
-project = 'com.appalachia.python.common_py'
+project = 'appapy'
 copyright = f'2019-{datetime.date.today().year}, AppalachiaInteractive< and contributors'
 author = 'AppalachiaInteractive <>'
 

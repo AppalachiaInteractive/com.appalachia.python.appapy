@@ -1,7 +1,7 @@
 from pathlib import Path
 from setuptools import setup
 
-from com.appalachia.python.common_py import __version__
+from appapy import __version__
 
 
 # Utility function to read the README file.
@@ -18,15 +18,15 @@ def read_requirements(filename):
 
 
 settings = dict(
-    name='com.appalachia.python.common_py',
-    packages=['com.appalachia.python.common_py'],
+    name='appapy',
+    packages=['appapy'],
     version=__version__,
     author='AppalachiaInteractive',
     author_email='',
     description=('Module for common functionality across other Appalachia Interactive modules.'),
     license='MIT',
-    keywords='com.appalachia.python.common_py',
-    url='https://github.com/AppalachiaInteractive/com.appalachia.python.common_py',
+    keywords='appapy',
+    url='https://github.com/AppalachiaInteractive/com.appalachia.python.appapy',
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
     python_requires='>=3.7',

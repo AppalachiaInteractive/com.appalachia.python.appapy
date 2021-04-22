@@ -1,4 +1,4 @@
-import com.appalachia.python.common_py
+import appapy
 
 
 def test_main():
