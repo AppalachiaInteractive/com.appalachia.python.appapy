@@ -2,10 +2,9 @@ import os
 from abc import ABC
 from typing import List, Tuple
 
-from appapy.common.env import get_home
-
 from appapy.common import shell
 from appapy.common.cli import demarcate, note
+from appapy.common.env import get_home
 
 
 class Package(ABC):

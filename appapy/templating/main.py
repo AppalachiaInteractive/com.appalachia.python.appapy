@@ -5,6 +5,7 @@ from appapy.templating.repositories import Repository
 from appapy.templating.templates import templates
 from appapy.templating.utils import *
 
+
 def execute(args : List[str]):
     print("Enter x to exit.")
     repo = Repository()

@@ -1,5 +1,6 @@
 import os
 
+
 def get_home() -> str:
     home = os.getenv("HOME")
     return home

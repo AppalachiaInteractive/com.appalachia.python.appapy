@@ -1,5 +1,6 @@
 import argparse
-from colorama import Fore, Back, Style
+
+from colorama import Back, Fore, Style
 
 print(f'{Style.DIM}----- {Style.RESET_ALL}{Style.BRIGHT}{Fore.BLUE}Appalachia Interactive {Fore.GREEN}: {Fore.YELLOW}Appa{Fore.CYAN}Py{Style.DIM}{Fore.WHITE} -----{Style.RESET_ALL} ')
 

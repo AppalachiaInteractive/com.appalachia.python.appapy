@@ -1,7 +1,8 @@
 import os
-from typing import List, Callable
+from typing import Callable, List
 
-from .constants import *
+from appapy.common.constants import *
+
 
 def remove_file(path: str, include_meta: bool = True):
     if DRY_RUN:

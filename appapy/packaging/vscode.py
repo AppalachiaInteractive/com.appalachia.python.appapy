@@ -1,4 +1,5 @@
-import os, shutil
+import os
+import shutil
 from typing import List, Tuple
 
 from appapy.common import shell

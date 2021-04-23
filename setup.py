@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from setuptools import setup
 
 from appapy import __version__
