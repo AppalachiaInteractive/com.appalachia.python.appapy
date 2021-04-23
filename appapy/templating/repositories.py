@@ -1,10 +1,10 @@
 import os
 
-from ..common.cli import *
-from ..common.env import get_home
-from .constants import *
-from .tokens import TokenizedProperty
-from .utils import *
+from appapy.common.cli import *
+from appapy.common.env import get_home
+from appapy.templating.constants import *
+from appapy.templating.tokens import TokenizedProperty
+from appapy.templating.utils import *
 
 
 class Repository:

@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 from os import name
 from typing import List
 
-from .constants import *
-from .licenses import License, license_lookup
-from .repositories import Repository
-from .utils import *
-from ..common.cli import *
+from appapy.templating.constants import *
+from appapy.templating.licenses import License, license_lookup
+from appapy.templating.repositories import Repository
+from appapy.templating.utils import *
+from appapy.common.cli import *
 
 class Owner(ABC):
     def __init__(self, key: str, name: str, license_options: List[License]):

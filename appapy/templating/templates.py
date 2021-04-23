@@ -1,18 +1,17 @@
 import os
 import shutil
-import subprocess
 from abc import ABC
 from typing import Dict, List
 
 import git
-
-from ..common.cli import *
-from ..common.constants import *
-from ..common.env import get_home
-from .constants import *
-from .owners import *
-from .repositories import Repository
-from .utils import *
+from appapy.common import shell
+from appapy.common.cli import *
+from appapy.common.constants import *
+from appapy.common.env import get_home
+from appapy.templating.constants import *
+from appapy.templating.owners import *
+from appapy.templating.repositories import Repository
+from appapy.templating.utils import *
 
 
 class Template(ABC):
@@ -25,10 +24,10 @@ class Template(ABC):
     def process(self, repo: Repository, owner: Owner):
 
         parts = repo.package.value.split(".")
-        
+
         owner.set_license(repo)
         owner.extract_metadata(repo, parts)
-        
+
         description = do_parameter("Enter a package description", no_validation)
         repo.description.value = do_ask_until_confirmed(
             description,
@@ -42,9 +41,9 @@ class Template(ABC):
 
         self.copy_files(repo)
         self.process_license(repo, owner)
-        
+
         repo.process_token_replacements()
-        
+
         self.process_workspace(repo)
         self.process_repository(repo)
         self.process_generator(repo)
@@ -120,7 +119,7 @@ class Template(ABC):
             )
 
             print(command)
-            subprocess.run(command, shell=True)
+            shell.run(command)
 
     def process_generator(self, repo: Repository):
         if self.generator == "":
@@ -128,19 +127,19 @@ class Template(ABC):
 
         print("Running generator...")
 
-        command = f"{self.generator} && git add . && git commit -m \"Adding project scaffolding\" && git push"
+        command = f'{self.generator} && git add . && git commit -m "Adding project scaffolding" && git push'
 
         print(command)
-        subprocess.run(command, shell=True)
+        shell.run(command)
 
     def copy_files(self, repo: Repository):
         home = os.getenv("HOME")
 
         for relative_walk_dir in [self.template_dir, common_dir]:
-            print(f'[COPY FILES]: {relative_walk_dir}')
-            
+            print(f"[COPY FILES]: {relative_walk_dir}")
+
             walk_dir = os.path.join(home, relative_walk_dir)
-            
+
             for dir_path, dir_names, file_names in os.walk(walk_dir):
 
                 for path_names in [dir_names, file_names]:
@@ -153,13 +152,14 @@ class Template(ABC):
 
                         if DRY_RUN:
                             continue
-                        
+
                         if os.path.isdir(path_from):
                             shutil.copytree(path_from, path_to)
                         else:
                             shutil.copy(path_from, path_to)
 
                 break
+
 
 class TemplateAPPA(Template):
     def __init__(self):

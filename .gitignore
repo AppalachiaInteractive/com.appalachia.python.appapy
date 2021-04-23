@@ -5,6 +5,7 @@ __pycache__
 /dist
 /.tox
 /.pytest_cache
+.venv
 
 # Jypyter notebook checkpoints
 .ipynb_checkpoints

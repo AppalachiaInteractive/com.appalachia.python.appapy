@@ -1,8 +1,24 @@
 
 
 from typing import Callable, List
+from colorama import Fore, Style
 
 
+def demarcate(message):
+    print(f"{Style.NORMAL}{Fore.LIGHTBLACK_EX}-------------------------------------{Style.RESET_ALL}")
+    print(f"{Style.NORMAL}{Fore.LIGHTBLACK_EX}| {Style.BRIGHT}{Fore.LIGHTYELLOW_EX}{message}{Style.RESET_ALL}")
+    print(f"{Style.NORMAL}{Fore.LIGHTBLACK_EX}-------------------------------------{Style.RESET_ALL}")
+    
+def note(message):
+    print(f"{Style.NORMAL}{Fore.CYAN}{message}{Style.RESET_ALL}")
+    
+def highlight(prefix, message):
+    print(f"{Style.BRIGHT}{Fore.CYAN}{prefix}: [{message}]{Style.RESET_ALL}")
+    
+def celebrate(message):
+    print(f"{Style.BRIGHT}{Fore.GREEN}{message}{Style.RESET_ALL}")
+          
+    
 def should_quit(parameter: str) -> bool:
     if parameter == "":
         return False
@@ -18,7 +34,7 @@ def do_ask(message: str) -> bool:
     print()
     parameter = ""
     while True:
-        parameter = input("{0}:  ".format(message))
+        parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}"))
 
         if parameter == "":
             continue
@@ -37,7 +53,7 @@ def do_parameter(message: str, validation: Callable) -> str:
     print()
     parameter = ""
     while True:
-        parameter = input("{0}:  ".format(message))
+        parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}"))
 
         if should_quit(parameter):
             raise ValueError(parameter)
@@ -53,9 +69,9 @@ def do_selection(options: List[object], message: str) -> int:
     mini, maxi = 1, len(options)
     while True:
         for index, option in enumerate(options):
-            print("[{0}]: {1}".format(index + 1, option))
+            print(f"{Fore.GREEN}[{index + 1}]: {Fore.CYAN}{option}{Style.RESET_ALL}")
 
-        parameter = input("{0}:  ".format(message))
+        parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}"))
 
         if should_quit(parameter):
             raise ValueError(parameter)
@@ -68,7 +84,7 @@ def do_selection(options: List[object], message: str) -> int:
             return parameter_int
 
         except Exception as e:
-            print("Try again...")
+            print(f"{Fore.RED}Try again...{Style.RESET_ALL}")
 
 
 def do_ask_until_confirmed(
@@ -96,11 +112,11 @@ def do_selection_until_confirmed(
     while not confirmation:
         option = selection_options[value]
         if hasattr(option, "name") and hasattr(option, "notes"):
-            print(f"[{option.name}]  {option.notes}")
+            print(f"{Fore.CYAN}[{option.name}]  {Fore.BLUE}{option.notes}{Style.RESET_ALL}")
         elif hasattr(option, "name"):
-            print(f"{option.name}")
+            print(f"{Fore.CYAN}{option.name}{Style.RESET_ALL}")
         elif hasattr(option, "notes"):
-            print(f"{option.notes}")
+            print(f"{Fore.BLUE}{option.notes}{Style.RESET_ALL}")
 
         confirmation = do_ask(confirmation_message.format(option.key))
 
