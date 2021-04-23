@@ -1,4 +1,4 @@
-# AppaPy - Appalachia Interactive Python Packages
+# AppaPy
 ```
            ,ggg,                                     ,ggggggggggg,            
           dP""8I                                    dP"""88""""""Y8,          
@@ -17,6 +17,7 @@ Yb,_,dP       `8b,,I8 _  ,d8' ,I8 _  ,d8' ,d8,   ,d8b,   88        ,d8b, ,d8I
                    I8          I8                                     `8, ,8I 
                    I8          I8                                      `Y8P"  
 ```
+## Appalachia Interactive Python Packages
 ## com.appalachia.python.appapy
 ### Created by Appalachia Interactive
 
