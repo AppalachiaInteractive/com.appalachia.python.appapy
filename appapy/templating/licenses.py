@@ -5,7 +5,6 @@ class License:
         self.name = name
         self.notes = notes
 
-
 licenses = [
     License(
         "NONE",

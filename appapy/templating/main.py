@@ -4,7 +4,7 @@ from appapy.templating.owners import owners
 from appapy.templating.repositories import Repository
 from appapy.templating.templates import templates
 from appapy.templating.utils import *
-
+from appapy.common import shell
 
 def execute(args : List[str]):
     print("Enter x to exit.")
@@ -24,4 +24,6 @@ def execute(args : List[str]):
     template = templates[template_index]
 
     template.process(repo, owner)
+    
+    shell.run("sh direnv allow")
 

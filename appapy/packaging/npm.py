@@ -30,7 +30,7 @@ class NPMPackage(Package):
             f"bash {home}/com.appalachia/appa/appa.sh docs releaselog {version} && git add ."
         )
 
-    def execute(self):        
+    def execute(self) -> Tuple[str, List[str]]:      
         self.execute_version_and_clean()                
         return self.execute_package()
 
@@ -54,7 +54,7 @@ class NPMPackage(Package):
         os.chdir(cwd)
 
         package_path = self.get_package_path()
-        return package_path
+        return package_path, []
     
     def get_package_path(self):
         package_path = ""

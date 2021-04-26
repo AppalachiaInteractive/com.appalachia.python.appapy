@@ -70,6 +70,7 @@ class Repository:
             absolute.replace(home, "")
             .replace("Assets", "")
             .replace("internal", "")
+            .replace("external", "")
             .replace("experimental", "")
             .replace("\\\\", ".")
             .replace("\\\\", ".")

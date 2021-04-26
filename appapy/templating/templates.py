@@ -12,6 +12,7 @@ from appapy.templating.constants import *
 from appapy.templating.owners import *
 from appapy.templating.repositories import Repository
 from appapy.templating.utils import *
+from colorama import Back, Fore, Style
 
 
 class Template(ABC):
@@ -44,23 +45,23 @@ class Template(ABC):
 
         repo.process_token_replacements()
 
-        self.process_workspace(repo)
+        #self.process_workspace(repo)
         self.process_repository(repo)
         self.process_generator(repo)
 
     def confirm_execution(self, repo: Repository):
         print("\n")
-        print("Please confirm your choices:")
+        print(f"{Fore.CYAN}Please confirm your choices:")
         print("----------------------------")
         print("\n")
         for token_key in repo.token_keys:
             prop = repo.token_lookup[token_key]
 
-            print(f"{prop.display_name}: [{prop.value}]")
+            print(f"{Fore.WHITE}{prop.display_name}: {Fore.GREEN}[{prop.value}]")
 
         print("----------------------------")
 
-        return do_ask("Would you like to proceed?")
+        return do_ask(f"{Fore.YELLOW}{Style.BRIGHT}Would you like to proceed?")
 
     def process_license(self, repo: Repository, owner: Owner):
         license_type = repo.license.value
@@ -68,7 +69,7 @@ class Template(ABC):
         if license_type == "NONE":
             return
 
-        print("Updating license to use {0}".format(license_type))
+        print(f"{Fore.CYAN}Updating license to use {Fore.YELLOW}{0}".format(license_type))
 
         license_file = os.path.join(
             get_home(), license_dir, owner.key, f"LICENSE_{license_type}.md"
@@ -80,17 +81,17 @@ class Template(ABC):
 
         shutil.copy(license_file, "LICENSE.md")
 
-    def process_workspace(self, repo: Repository):
-        print("Renaming workspace...")
-        workspace_file = "workspace.code-workspace"
-        target_file = workspace_file.replace(
-            "workspace.", "{0}.".format(repo.package.value)
-        )
+    # def process_workspace(self, repo: Repository):
+    #     print(f"{Fore.BLUE}Renaming workspace...")
+    #     workspace_file = "workspace.code-workspace"
+    #     target_file = workspace_file.replace(
+    #         "workspace.", "{0}.".format(repo.package.value)
+    #     )
 
-        rename_file(workspace_file, target_file, True)
+    #     rename_file(workspace_file, target_file, True)
 
     def process_repository(self, repo: Repository):
-        print("Initializing repository...")
+        print(f"{Fore.BLUE}Initializing repository...")
 
         remote_url = (
             f"https://github.com/AppalachiaInteractive/{repo.package.value}.git"
@@ -103,13 +104,13 @@ class Template(ABC):
             git_repo = git.Repo(repo.directory)
         except git.InvalidGitRepositoryError:
             can_create = do_ask(
-                f'The remote "origin" at [{remote_url}] does not exist.  Should we create it?'
+                f'{Fore.YELLOW}The remote "origin" at {Fore.CYAN}[{remote_url}]{Fore.YELLOW} does not exist.  {Fore.MAGENTA}Should we create it?'
             )
 
             if not can_create:
                 return
 
-            public = do_ask("Is this repository public?")
+            public = do_ask(f"{Fore.MAGENTA}Is this repository public?")
 
             command = 'sh {0} "AppalachiaInteractive/{1}" {2} "{3}"'.format(
                 os.path.join(get_home(), command_dir, "repo", "init.sh"),
@@ -136,7 +137,7 @@ class Template(ABC):
         home = os.getenv("HOME")
 
         for relative_walk_dir in [self.template_dir, common_dir]:
-            print(f"[COPY FILES]: {relative_walk_dir}")
+            print(f"{Fore.CYAN}[COPY FILES]: {Fore.YELLOW}{relative_walk_dir}")
 
             walk_dir = os.path.join(home, relative_walk_dir)
 
@@ -148,13 +149,13 @@ class Template(ABC):
                         path_from = os.path.join(dir_path, pathname)
                         path_to = os.path.join(repo.directory, pathname)
 
-                        print(f"[FROM] {path_from} | [TO] {path_to}")
+                        print(f"{Fore.CYAN}[FROM] {path_from} {Fore.WHITE}|{Fore.YELLOW} [TO] {path_to}")
 
                         if DRY_RUN:
                             continue
 
                         if os.path.isdir(path_from):
-                            shutil.copytree(path_from, path_to)
+                            shutil.copytree(path_from, path_to, dirs_exist_ok=True)
                         else:
                             shutil.copy(path_from, path_to)
 
