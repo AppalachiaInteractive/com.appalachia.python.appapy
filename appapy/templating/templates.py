@@ -24,6 +24,8 @@ class Template(ABC):
 
     def process(self, repo: Repository, owner: Owner):
 
+        repo.year.value = "2021"
+        
         parts = repo.package.value.split(".")
 
         owner.set_license(repo)

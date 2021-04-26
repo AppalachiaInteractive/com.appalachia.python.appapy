@@ -8,31 +8,37 @@ from appapy.common.env import get_home
 
 
 class Package(ABC):
-    def __init__(self, directory : str, bump : str):
+    def __init__(self, directory: str, bump: str):
         self.directory = directory
         self.bump = bump
 
     def preversion(self):
         demarcate("[PREVERSION]")
 
-        shell.run("git fetch -p && git pull --tags && git add .")
+        shell.run("git fetch -p && git pull && git fetch --tags -f && git pull --tags && git push --tags")
 
     def version(self):
         demarcate("[VERSION]")
 
-        home = get_home()
-        shell.run(f"bash {home}/com.appalachia/appa/appa.sh docs releaselog && git add .")
+        self.changelog()
+        self.releaselog()
 
-    def postversion(self):
-        demarcate("[POSTVERSION]")
-
-        home = get_home()
-        shell.run(f"bash {home}/com.appalachia/appa/appa.sh docs changelog")
         mods = "modifications.sh"
         if os.path.isfile(mods):
             shell.run(f"bash {mods}")
 
-        shell.run("git push && git push --tags && git add .")
+        shell.run(f"git add .")
+
+    def changelog(self):
+        home = get_home()
+        shell.run(f"bash {home}/com.appalachia/appa/appa.sh docs changelog")
+
+    def releaselog(self):
+        home = get_home()
+        shell.run(f"bash {home}/com.appalachia/appa/appa.sh docs releaselog")
+
+    def postversion(self):
+        demarcate("[POSTVERSION]")
 
     def prepack(self):
         demarcate("[PREPACK]")
@@ -71,7 +77,7 @@ class Package(ABC):
         demarcate("[POSTTEST]")
 
     def execute(self) -> Tuple[str, List[str]]:
-        return ('', [])
-    
-    def release(self, package_path : str):
+        return ("", [])
+
+    def release(self, package_path: str):
         pass

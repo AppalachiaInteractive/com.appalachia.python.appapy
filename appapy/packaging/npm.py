@@ -22,14 +22,13 @@ class NPMPackage(Package):
         self.npm_package = npmpackage(os.path.join(self.directory, "package.json"))
         self.json = self.npm_package.package_json
 
-    def version(self):
-        demarcate("[VERSION]")
-        version = self.json["version"]
+    def releaselog(self):
         home = get_home()
-        shell.run(
-            f"bash {home}/com.appalachia/appa/appa.sh docs releaselog {version} && git add ."
-        )
+        self.refresh_package()        
+        version = self.json["version"]
+        shell.run(f"bash {home}/com.appalachia/appa/appa.sh docs releaselog {version}")
 
+        
     def execute(self) -> Tuple[str, List[str]]:      
         self.execute_version_and_clean()                
         return self.execute_package()

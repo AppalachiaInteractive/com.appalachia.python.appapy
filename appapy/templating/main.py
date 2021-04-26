@@ -25,5 +25,5 @@ def execute(args : List[str]):
 
     template.process(repo, owner)
     
-    shell.run("sh direnv allow")
+    # shell.run("sh direnv allow")
 
