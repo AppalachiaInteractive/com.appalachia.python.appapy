@@ -35,6 +35,9 @@ class Repository:
         self.author = TokenizedProperty(
             "author", "Author", "Enter the author of the package"
         )
+        self.year = TokenizedProperty(
+            "year", "Copyright Year", "Enter the copyright year of the package"
+        )
 
         self.tokenized_properties = [
             self.package,
@@ -45,6 +48,7 @@ class Repository:
             self.license,
             self.licenseid,
             self.author,
+            self.year
         ]
 
         self.token_keys = [prop.key for prop in self.tokenized_properties]
@@ -79,7 +83,7 @@ class Repository:
             .replace("..", ".")
             .replace("..", ".")
             .replace("..", ".")
-            .strip(".")
+            .strip().strip(".").strip()
         )
 
         package = do_ask_until_confirmed(
