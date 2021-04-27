@@ -29,12 +29,7 @@ class NPMPackage(Package):
         shell.run(f"bash {home}/com.appalachia/appa/appa.sh docs releaselog {version}")
 
         
-    def execute(self) -> Tuple[str, List[str]]:      
-        self.execute_version_and_clean()                
-        return self.execute_package()
-
-    def execute_version_and_clean(self):
-        
+    def execute_version(self) -> None:        
         shell.run(f"npm version {self.bump}")
 
         self.refresh_package()

@@ -46,7 +46,11 @@ def execute(args: List[str]):
     elif tech == "unity3d":
         package = Unity3D(working_directory, bump)
 
-    package_path, additional_files = package.execute()
+    if bump != 'current':
+        package.execute_version()
+    
+    package_path, additional_files = package.execute_package()
+    
     
     if package_path != '':
         package.release(package_path, additional_files)

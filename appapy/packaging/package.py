@@ -76,8 +76,11 @@ class Package(ABC):
     def posttest(self):
         demarcate("[POSTTEST]")
 
-    def execute(self) -> Tuple[str, List[str]]:
+    def execute_version(self) -> Tuple[str, List[str]]:
+        return
+
+    def execute_package(self) -> Tuple[str, List[str]]:
         return ("", [])
 
     def release(self, package_path: str):
-        pass
+        return
