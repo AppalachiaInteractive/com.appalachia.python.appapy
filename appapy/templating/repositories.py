@@ -90,14 +90,14 @@ class Repository:
             package,
             "Is this the correct package?  {0}",
             "Enter the package name",
-            no_validation,
-        )
+            package_validation,
+        )                
 
         if len(package) < 8:
             raise ValueError(package)
 
         self.package.set(package)
-
+        
     def process_token_replacements(self):
         print("Replacing tokens...")
 

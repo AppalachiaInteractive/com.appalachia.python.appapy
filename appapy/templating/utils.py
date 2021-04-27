@@ -28,5 +28,8 @@ def rename_file(old: str, new: str, include_meta: bool = True):
 def no_validation(parameter: str) -> bool:
     return True
 
+def package_validation(parameter: str) -> bool:
+    return 'com.appalachia.' in parameter
+
 def get_clean_part(value: str) -> str:
     return value.replace("-", " ").replace("3d", "3D").title()

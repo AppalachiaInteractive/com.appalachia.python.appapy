@@ -30,6 +30,13 @@ class Template(ABC):
 
         owner.set_license(repo)
         owner.extract_metadata(repo, parts)
+        
+        repo.display.value = do_ask_until_confirmed(
+            repo.display.value,
+            "Is this the package display name? [{0}]",
+            "Enter the package display name",
+            no_validation,
+        )
 
         description = do_parameter("Enter a package description", no_validation)
         repo.description.value = do_ask_until_confirmed(
