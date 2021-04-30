@@ -24,9 +24,9 @@ class Owner(ABC):
             self.license = self.license_options[0]
         else:
             license_index = do_selection_until_confirmed(
-                "Is {0} the intended license?",
+                repo.license.confirmation_message,
                 self.license_options,
-                "Enter the license",
+                repo.license.enter_message
             )
             self.license = self.license_options[license_index]
 

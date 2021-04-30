@@ -10,43 +10,47 @@ from appapy.templating.utils import *
 
 class Repository:
     def __init__(self):
-        self.directory = ""
-
+        self.directory = TokenizedProperty(
+            "directory", "Directory", "Enter the directory (starting with ~/)", "Is {0} the intended directory??  {0}", os.path.isdir
+        )
         self.package = TokenizedProperty(
-            "package", "Package", "Enter the name of the package"
+            "package", "Package", "Enter the package name", "Is this the correct package?  {0}", package_validation
         )
         self.project = TokenizedProperty(
-            "project", "Project", "Enter the name of the project"
+            "project", "Project", "Enter the name of the project",  "Is this the correct project name?  {0}", no_validation
         )
         self.display = TokenizedProperty(
-            "display", "Display", "Enter the display name of the package"
+            "display", "Display", "Enter the display name of the package", "Is this the package display name? [{0}]",no_validation
         )
         self.version = TokenizedProperty(
-            "version", "Version", "Enter the intitial ersion of the package"
+            "version", "Version", "Enter the initial version of the package", "Is {0} the intended initial version?", no_validation
         )
         self.description = TokenizedProperty(
-            "description", "Description", "Enter a description of the package"
+            "description", "Description", "Enter a description of the package", "Is this the package description? [{0}]", no_validation
         )
         self.license = TokenizedProperty(
-            "license", "License", "Enter the license of the package"
+            "license", "License", "Enter the license of the package", "Is {0} the intended license?", no_validation
         )
         self.license1 = TokenizedProperty(
-            "license1", "License 1", "Enter the original license of the package"
+            "license1", "License 1", "Enter the original license of the package", "Is {0} the intended original license?", no_validation
         )
         self.license2 = TokenizedProperty(
-            "license2", "License 2", "Enter the update license of the package"
+            "license2", "License 2", "Enter the updated license of the package", "Is {0} the intended updated license?", no_validation
+        )
+        self.csnamespace = TokenizedProperty(
+            "csnamespace", "C# Namespace", "Enter the C# Root Namespace of the package", "Is this the correct C# Root Namespace? {0}", no_validation
         )
         self.commit = TokenizedProperty(
-            "commit", "License Transition Commit Hash", "Enter the commit hash that indicates the license change"
+            "commit", "License Transition Commit Hash", "Enter the commit hash that indicates the license change", "Is this the correct C# Root Namespace? {0}", no_validation
         )
         self.licenseid = TokenizedProperty(
-            "licenseid", "License ID", "Enter the license identifier of the package"
+            "licenseid", "License ID", "Enter the license identifier of the package", "Is {0} the intended license?", no_validation
         )
         self.author = TokenizedProperty(
-            "author", "Author", "Enter the author of the package"
+            "author", "Author", "Enter the author of the package", "Is this the package author? [{0}]", no_validation
         )
         self.year = TokenizedProperty(
-            "year", "Copyright Year", "Enter the copyright year of the package"
+            "year", "Copyright Year", "Enter the copyright year of the package", "Is {0} the intended year?", no_validation
         )
 
         self.tokenized_properties = [
@@ -69,17 +73,17 @@ class Repository:
 
         directory = do_ask_until_confirmed(
             directory,
-            "Is {0} the intended directory?",
-            "Enter the directory (starting with ~/)",
-            os.path.isdir,
+            self.directory.confirmation_message,
+            self.directory.enter_message,
+            self.directory.enter_validation
         )
 
         os.chdir(directory)
-        self.directory = directory
+        self.directory.set(directory)
 
     def get_package(self):
         home = get_home()
-        absolute = os.path.abspath(self.directory)
+        absolute = os.path.abspath(self.directory.value)
         package = (
             absolute.replace(home, "")
             .replace("Assets", "")
@@ -99,10 +103,10 @@ class Repository:
 
         package = do_ask_until_confirmed(
             package,
-            "Is this the correct package?  {0}",
-            "Enter the package name",
-            package_validation,
-        )                
+            self.package.confirmation_message,
+            self.package.enter_message,
+            self.package.enter_validation,
+        )
 
         if len(package) < 8:
             raise ValueError(package)
@@ -112,7 +116,7 @@ class Repository:
     def process_token_replacements(self):
         print("Replacing tokens...")
         
-        for dir_path, dir_names, file_names in os.walk(self.directory):
+        for dir_path, dir_names, file_names in os.walk(self.directory.value):
             for file_name in file_names:          
                 
                 token_file_path = os.path.join(dir_path, file_name)

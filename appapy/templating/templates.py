@@ -33,17 +33,17 @@ class Template(ABC):
         
         repo.display.value = do_ask_until_confirmed(
             repo.display.value,
-            "Is this the package display name? [{0}]",
-            "Enter the package display name",
-            no_validation,
+            repo.display.confirmation_message,
+            repo.display.enter_message,
+            repo.display.enter_validation            
         )
 
-        description = do_parameter("Enter a package description", no_validation)
+        description = do_parameter(repo.description.enter_message, repo.description.enter_validation)
         repo.description.value = do_ask_until_confirmed(
             description,
-            "Is this the package description? [{0}]",
-            "Enter a package description",
-            no_validation,
+            repo.description.confirmation_message,
+            repo.description.enter_message,
+            repo.description.enter_validation
         )        
         
         if not repo.description.value.endswith("."):
@@ -51,10 +51,12 @@ class Template(ABC):
         
         repo.author.value = do_ask_until_confirmed(
             repo.author.value,
-            "Is this the package author? [{0}]",
-            "Enter the package author name",
-            no_validation,
+            repo.author.confirmation_message,
+            repo.author.enter_message,
+            repo.author.enter_validation,
         )
+        
+        self.pre_confirm(repo)
 
         if not self.confirm_execution(repo):
             return
@@ -67,6 +69,9 @@ class Template(ABC):
         #self.process_workspace(repo)
         self.process_repository(repo)
         self.process_generator(repo)
+        
+    def pre_confirm(self, repo: Repository) -> None:
+        pass
 
     def confirm_execution(self, repo: Repository):
         print("\n")
@@ -120,7 +125,7 @@ class Template(ABC):
             print(remote_url)
             return
         try:
-            git_repo = git.Repo(repo.directory)
+            git_repo = git.Repo(repo.directory.value)
         except git.InvalidGitRepositoryError:
             can_create = do_ask(
                 f'{Fore.YELLOW}The remote "origin" at {Fore.CYAN}[{remote_url}]{Fore.YELLOW} does not exist.  {Fore.MAGENTA}Should we create it?'
@@ -166,7 +171,7 @@ class Template(ABC):
 
                     for pathname in path_names:
                         path_from = os.path.join(dir_path, pathname)
-                        path_to = os.path.join(repo.directory, pathname)
+                        path_to = os.path.join(repo.directory.value, pathname)
 
                         print(f"{Fore.CYAN}[FROM] {path_from} {Fore.WHITE}|{Fore.YELLOW} [TO] {path_to}")
 
@@ -204,6 +209,18 @@ class TemplateUNITYPKG(Template):
             "Unity Package",
             f"{root_dir}/appa/templates/com.appalachia.unity3d.package",
         )
+        
+    def pre_confirm(self, repo: Repository) -> None:
+        repo.tokenized_properties.append(repo.csnamespace)
+        
+        csnamespace = do_parameter(repo.csnamespace.enter_message, no_validation)
+        repo.csnamespace.value = do_ask_until_confirmed(
+            repo.csnamespace.confirmation_message,
+            repo.csnamespace.enter_message,
+            repo.csnamespace.enter_validation,
+        )        
+
+        repo.csnamespace.set(csnamespace)
 
 class TemplateUNITYPKGFRK(Template):
     def __init__(self):
