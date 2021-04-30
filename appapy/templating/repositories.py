@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from appapy.common.cli import *
 from appapy.common.env import get_home
@@ -110,34 +111,40 @@ class Repository:
         
     def process_token_replacements(self):
         print("Replacing tokens...")
-
-        for token_file_name in token_files:
-
-            token_file_path = os.path.join(self.directory, token_file_name)
-            
-            print(token_file_path)
-            if not os.path.isfile(token_file_path):
-                print(f"Missing {token_file_path}")
-                continue
-
-            print(f"Replacing tokens for [{token_file_path}]...")
         
-            if DRY_RUN:
-                continue
-            
-            lines = []
-            with open(token_file_path, mode="r",encoding='utf-8') as fs:
-                for line in fs:
-                    for token in self.tokenized_properties:
-                        line = token.replace(line)
-
-                    lines.append(line)
-
-                if DRY_RUN:
-                    print(lines)
+        for dir_path, dir_names, file_names in os.walk(self.directory):
+            for file_name in file_names:          
+                
+                token_file_path = os.path.join(dir_path, file_name)
+                    
+                print(token_file_path)
+                if not os.path.isfile(token_file_path):
+                    print(f"Missing {token_file_path}")
                     continue
 
-            with open(token_file_path, mode="w") as fs:
-                fs.write("".join(lines))
+                print(f"Replacing tokens for [{token_file_path}]...")
+            
+                if DRY_RUN:
+                    continue
+                                
+                lines = []
+                with open(token_file_path, mode="r",encoding='utf-8') as fs:
+                    for line in fs:
+                        for token in self.tokenized_properties:
+                            line = token.replace(line)
+
+                        lines.append(line)
+
+                with open(token_file_path, mode="w") as fs:
+                    fs.write("".join(lines))
+                
+                new_file_name = file_name
+                for token in self.tokenized_properties:
+                    new_file_name = token.replace(new_file_name)
+                    
+                if new_file_name != file_name:
+                    new_file_path = os.path.join(dir_path, new_file_name)
+                    print(f"Moving from [{file_name}] to [{new_file_name}]...")
+                    shutil.move(token_file_path, new_file_path)
 
         print("Token replacement completed.")
