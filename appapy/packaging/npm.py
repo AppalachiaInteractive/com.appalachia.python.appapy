@@ -29,8 +29,19 @@ class NPMPackage(Package):
         shell.run(f"bash {home}/com.appalachia/appa/appa.sh docs releaselog {version}")
 
         
-    def execute_version(self) -> None:        
-        shell.run(f"npm version {self.bump}")
+    def execute_version(self) -> None:    
+        if self.bump == 'current':            
+            self.preversion()
+            
+            self.refresh_package()        
+            version = self.json["version"]
+            
+            shell.run(f"git tag {version} && git push --tags")
+            self.version()
+            shell.run(f"git add . && git commit -m ${version} && git push")
+            self.postversion()
+        else:
+            shell.run(f"npm version {self.bump}")
 
         self.refresh_package()
 
@@ -70,7 +81,7 @@ class NPMPackage(Package):
         return file_args
                 
     def release(self, package_path: str, additional_files : List[str]):
-        shell.run(f'npm publish "{package_path}" --registry \"{npm_registry}\"')
+        shell.run(f'npm --max-old-space-size=4096 publish "{package_path}" --registry \"{npm_registry}\"')
 
         file_args = self.get_gh_file_args(additional_files)
             

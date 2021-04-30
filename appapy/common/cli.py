@@ -35,7 +35,7 @@ def do_ask(message: str) -> bool:
     print()
     parameter = ""
     while True:
-        parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}"))
+        parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}")).strip()
 
         if parameter == "":
             continue
@@ -54,7 +54,7 @@ def do_parameter(message: str, validation: Callable) -> str:
     print()
     parameter = ""
     while True:
-        parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}"))
+        parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}")).strip()
 
         if should_quit(parameter):
             raise ValueError(parameter)
@@ -72,7 +72,7 @@ def do_selection(options: List[object], message: str) -> int:
         for index, option in enumerate(options):
             print(f"{Fore.GREEN}[{index + 1}]: {Fore.CYAN}{option}{Style.RESET_ALL}")
 
-        parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}"))
+        parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}")).strip()
 
         if should_quit(parameter):
             raise ValueError(parameter)

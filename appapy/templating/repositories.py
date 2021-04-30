@@ -29,6 +29,15 @@ class Repository:
         self.license = TokenizedProperty(
             "license", "License", "Enter the license of the package"
         )
+        self.license1 = TokenizedProperty(
+            "license1", "License 1", "Enter the original license of the package"
+        )
+        self.license2 = TokenizedProperty(
+            "license2", "License 2", "Enter the update license of the package"
+        )
+        self.commit = TokenizedProperty(
+            "commit", "License Transition Commit Hash", "Enter the commit hash that indicates the license change"
+        )
         self.licenseid = TokenizedProperty(
             "licenseid", "License ID", "Enter the license identifier of the package"
         )
@@ -75,6 +84,7 @@ class Repository:
             .replace("Assets", "")
             .replace("internal", "")
             .replace("external", "")
+            .replace("common", "")
             .replace("experimental", "")
             .replace("\\\\", ".")
             .replace("\\\\", ".")

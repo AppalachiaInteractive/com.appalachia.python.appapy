@@ -10,4 +10,16 @@ def run(command: str):
 def run_and_read(command: str) -> str:
     print(f"{Fore.CYAN}Executing: {Fore.YELLOW}[{command}]{Fore.RESET}")
     p = subprocess.run(command, shell=True, check=True,stdout=subprocess.PIPE)
-    return p.stdout.strip()
+    out = str(p.stdout)
+    clean = out.strip()
+    args = [ "\\n", "\n", "b'", "'" ]    
+    for i in range(2):
+        clean = clean.strip()
+        for arg in args:
+            clean = clean.strip(arg)
+    
+    clean = clean.strip()
+            
+    print(f"{Fore.LIGHTBLUE_EX}OUT: {Fore.LIGHTCYAN_EX}[{out}]{Fore.RESET}")
+    print(f"{Fore.LIGHTBLUE_EX}CLEAN: {Fore.LIGHTGREEN_EX}[{clean}]{Fore.RESET}")
+    return clean

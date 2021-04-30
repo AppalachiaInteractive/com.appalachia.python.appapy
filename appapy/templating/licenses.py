@@ -72,6 +72,12 @@ licenses = [
         "Creative Commons Attribution Share Alike 4.0 International",
         "Requires attribution and must be released under the same license.",
     ),
+    License(
+        "DUAL",
+        "SEE LICENSE IN LICENSE.MD",
+        "Dual licensing for forked projects",
+        "Two licenses because the project was forked - identifies a commit that will mark the transition.",
+    ),
 ]
 
 license_lookup = {license.key: license for license in licenses}

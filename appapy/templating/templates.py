@@ -44,6 +44,16 @@ class Template(ABC):
             "Is this the package description? [{0}]",
             "Enter a package description",
             no_validation,
+        )        
+        
+        if not repo.description.value.endswith("."):
+            repo.description.value += "."
+        
+        repo.author.value = do_ask_until_confirmed(
+            repo.author.value,
+            "Is this the package author? [{0}]",
+            "Enter the package author name",
+            no_validation,
         )
 
         if not self.confirm_execution(repo):
@@ -195,7 +205,63 @@ class TemplateUNITYPKG(Template):
             f"{root_dir}/appa/templates/com.appalachia.unity3d.package",
         )
 
+class TemplateUNITYPKGFRK(Template):
+    def __init__(self):
+        super(TemplateUNITYPKGFRK, self).__init__(
+            "UNITYPKGFRK",
+            "Unity Package (Forked)",
+            f"{root_dir}/appa/templates/com.appalachia.unity3d.package.fork",
+        )
 
+    def process_license(self, repo: Repository, owner: Owner):
+        license_type = repo.license.value
+
+        if repo.license.value == "NONE":
+            return
+        if repo.license.value != "DUAL":
+            super(TemplateUNITYPKGFRK, self).process_license(repo, owner)
+            return
+        
+        props = [repo.license1, repo.license2, repo.commit]
+        
+        for prop in props:
+            repo.tokenized_properties.append(prop)
+            repo.token_keys.append(prop.key)
+            repo.token_lookup[prop.key] = prop
+                    
+        print(f"{Fore.CYAN}Updating license to use {Fore.YELLOW}{0}".format(repo.license.value))
+
+        repo.license.value = owner.license.key
+        repo.licenseid.value = owner.license.spdx_id
+                 
+        license_index = do_selection_until_confirmed(
+            "Is {0} the intended original license?", owner.license_options,  f"Enter the original license")
+        repo.license1.value = owner.license_options[license_index].key
+        license_index = do_selection_until_confirmed(
+            "Is {0} the intended update license?", owner.license_options,  f"Enter the update license")        
+        repo.license2.value = owner.license_options[license_index].key
+        
+        repo.commit.value = shell.run_and_read("git rev-parse HEAD")
+        repo.commit.value = do_ask_until_confirmed(repo.commit.value, "Is [{0}] the license transition commit hash?", "Enter the license transition commit hash", commit_hash)
+        
+        license_file = os.path.join(
+            get_home(), license_dir, owner.key, f"LICENSE_{repo.license.value}.md"
+        )
+        license_file1 = os.path.join(
+            get_home(), license_dir, owner.key, f"LICENSE_{repo.license1.value}.md"
+        )
+        license_file2 = os.path.join(
+            get_home(), license_dir, "appa", f"LICENSE_{repo.license2.value}.md"
+        )
+
+        if DRY_RUN:
+            print(license_file)
+            return
+
+        shutil.copy(license_file, "LICENSE.md")
+        shutil.copy(license_file1, "LICENSE.ORIGINAL.md")
+        shutil.copy(license_file2, "LICENSE.UPDATED.md")
+        
 class TemplateVSCODE(Template):
     def __init__(self):
         super(TemplateVSCODE, self).__init__(
@@ -240,6 +306,7 @@ templates: List[Template] = [
     TemplateAPPA(),
     TemplateUNITY(),
     TemplateUNITYPKG(),
+    TemplateUNITYPKGFRK(),
     TemplateVSCODE(),
     TemplateNODE(),
     TemplateCS(),

@@ -11,9 +11,9 @@ from appapy.templating.utils import *
 
 class Owner(ABC):
     def __init__(self, key: str, name: str, license_options: List[License]):
-        self.key = key
-        self.name = name
-        self.license_options = license_options
+        self.key: str = key
+        self.name: str = name
+        self.license_options: List[License] = license_options
         self.license: License = None
 
     def set_license(self, repo: Repository):
@@ -87,11 +87,17 @@ class ThirdParty(Owner):
                 license_lookup["MIT"],
                 license_lookup["APL"],
                 license_lookup["MPL"],
+                license_lookup["DUAL"],
             ],
         )
 
     def extract_metadata(self, repo: Repository, parts: List[str]):
-        if len(parts) == 5:
+        if len(parts) == 4:
+            # com.appalachia.technology.library
+            tech = get_clean_part(parts[2])
+            libr = get_clean_part(parts[3])
+            repo.display.value = f"{libr} for {tech}"
+        elif len(parts) == 5:
             # com.appalachia.technology.author.library
             tech = get_clean_part(parts[2])
             auth = get_clean_part(parts[3])
