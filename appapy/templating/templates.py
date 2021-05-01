@@ -74,6 +74,10 @@ class Template(ABC):
         pass
 
     def confirm_execution(self, repo: Repository):
+        
+        repo.token_keys = [prop.key for prop in repo.tokenized_properties]
+        repo.token_lookup = {prop.key: prop for prop in repo.tokenized_properties}
+        
         print("\n")
         print(f"{Fore.CYAN}Please confirm your choices:")
         print("----------------------------")
@@ -214,10 +218,11 @@ class TemplateUNITYPKG(Template):
         repo.tokenized_properties.append(repo.csnamespace)
         
         csnamespace = do_parameter(repo.csnamespace.enter_message, no_validation)
-        repo.csnamespace.value = do_ask_until_confirmed(
+        csnamespace = do_ask_until_confirmed(
+            csnamespace,
             repo.csnamespace.confirmation_message,
             repo.csnamespace.enter_message,
-            repo.csnamespace.enter_validation,
+            repo.csnamespace.enter_validation
         )        
 
         repo.csnamespace.set(csnamespace)

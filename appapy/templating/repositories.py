@@ -11,13 +11,13 @@ from appapy.templating.utils import *
 class Repository:
     def __init__(self):
         self.directory = TokenizedProperty(
-            "directory", "Directory", "Enter the directory (starting with ~/)", "Is {0} the intended directory??  {0}", os.path.isdir
+            "directory", "Directory", "Enter the directory (starting with ~/)", "Is this the intended directory? [{0}]", os.path.isdir
         )
         self.package = TokenizedProperty(
-            "package", "Package", "Enter the package name", "Is this the correct package?  {0}", package_validation
+            "package", "Package", "Enter the package name", "Is this the correct package?  [{0}]", package_validation
         )
         self.project = TokenizedProperty(
-            "project", "Project", "Enter the name of the project",  "Is this the correct project name?  {0}", no_validation
+            "project", "Project", "Enter the name of the project",  "Is this the correct project name?  [{0}]", no_validation
         )
         self.display = TokenizedProperty(
             "display", "Display", "Enter the display name of the package", "Is this the package display name? [{0}]",no_validation
@@ -38,10 +38,10 @@ class Repository:
             "license2", "License 2", "Enter the updated license of the package", "Is {0} the intended updated license?", no_validation
         )
         self.csnamespace = TokenizedProperty(
-            "csnamespace", "C# Namespace", "Enter the C# Root Namespace of the package", "Is this the correct C# Root Namespace? {0}", no_validation
+            "csnamespace", "C# Namespace", "Enter the C# Root Namespace of the package", "Is this the correct C# Root Namespace? [{0}]", no_validation
         )
         self.commit = TokenizedProperty(
-            "commit", "License Transition Commit Hash", "Enter the commit hash that indicates the license change", "Is this the correct C# Root Namespace? {0}", no_validation
+            "commit", "License Transition Commit Hash", "Enter the commit hash that indicates the license change", "Is this the correct license transition commit hash? [{0}]", no_validation
         )
         self.licenseid = TokenizedProperty(
             "licenseid", "License ID", "Enter the license identifier of the package", "Is {0} the intended license?", no_validation
@@ -116,6 +116,9 @@ class Repository:
     def process_token_replacements(self):
         print("Replacing tokens...")
         
+        self.token_keys = [prop.key for prop in self.tokenized_properties]
+        self.token_lookup = {prop.key: prop for prop in self.tokenized_properties}
+        
         for dir_path, dir_names, file_names in os.walk(self.directory.value):
             for file_name in file_names:          
                 
@@ -131,18 +134,9 @@ class Repository:
                 if DRY_RUN:
                     continue
                                 
-                lines = []
-                with open(token_file_path, mode="r",encoding='utf-8') as fs:
-                    for line in fs:
-                        for token in self.tokenized_properties:
-                            line = token.replace(line)
-
-                        lines.append(line)
-
-                with open(token_file_path, mode="w") as fs:
-                    fs.write("".join(lines))
-                
                 new_file_name = file_name
+                new_file_path = token_file_path
+                
                 for token in self.tokenized_properties:
                     new_file_name = token.replace(new_file_name)
                     
@@ -150,5 +144,20 @@ class Repository:
                     new_file_path = os.path.join(dir_path, new_file_name)
                     print(f"Moving from [{file_name}] to [{new_file_name}]...")
                     shutil.move(token_file_path, new_file_path)
+                                
+                lines = []
+                try:                
+                    with open(new_file_path, mode="r",encoding='utf-8') as fs:
+                        for line in fs:
+                            for token in self.tokenized_properties:
+                                line = token.replace(line)
+
+                            lines.append(line)
+
+                    with open(new_file_path, mode="w") as fs:
+                        fs.write("".join(lines))       
+                except UnicodeError as ue:
+                    pass
+                
 
         print("Token replacement completed.")
