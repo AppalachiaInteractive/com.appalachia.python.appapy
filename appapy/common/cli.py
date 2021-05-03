@@ -4,6 +4,8 @@ from typing import Callable, List
 
 from colorama import Fore, Style
 
+from appapy.common.exceptions import QuitError, RestartError
+
 
 def demarcate(message):
     print(f"{Style.NORMAL}{Fore.LIGHTBLACK_EX}-------------------------------------{Style.RESET_ALL}")
@@ -30,6 +32,16 @@ def should_quit(parameter: str) -> bool:
         return True
     return False
 
+def should_restart(parameter: str) -> bool:
+    if parameter == "":
+        return False
+
+    l = parameter.lower()
+
+    if l == "r" or l == "restart":
+        return True
+    return False
+
 
 def do_ask(message: str) -> bool:
     print()
@@ -47,7 +59,9 @@ def do_ask(message: str) -> bool:
             return False
 
         if should_quit(parameter):
-            raise ValueError(parameter)
+            raise QuitError(parameter)
+        if should_restart(parameter):
+            raise RestartError(parameter)
 
 
 def do_parameter(message: str, validation: Callable) -> str:
@@ -57,7 +71,9 @@ def do_parameter(message: str, validation: Callable) -> str:
         parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}")).strip()
 
         if should_quit(parameter):
-            raise ValueError(parameter)
+            raise QuitError(parameter)
+        if should_restart(parameter):
+            raise RestartError(parameter)
 
         if validation(parameter):
             break
@@ -75,7 +91,9 @@ def do_selection(options: List[object], message: str) -> int:
         parameter = input("{0}:  ".format(f"{Fore.YELLOW}{message}{Style.RESET_ALL}")).strip()
 
         if should_quit(parameter):
-            raise ValueError(parameter)
+            raise QuitError(parameter)
+        if should_restart(parameter):
+            raise RestartError(parameter)
 
         try:
             parameter_int = int(parameter)

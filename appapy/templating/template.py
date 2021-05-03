@@ -31,7 +31,6 @@ class Template(ABC):
         replace_parts = [
             "com",
             "appalachia",
-            repo.authorid.value,
             repo.projectid.value,
             repo.technology.value,
             repo.technologyid.value,
