@@ -1,0 +1,74 @@
+[
+    {
+        "key": "NONE",
+        "name": "None",
+        "notes": "This work will not be explicitly licensed, which releases no rights to the work to the public.",
+        "spdx_id": "UNLICENSED"
+    },
+    {
+        "key": "AGPL",
+        "name": "GNU AGPLv3",
+        "notes": "Permissions of this strongest copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license.",
+        "spdx_id": "AGPL-3.0-or-later"
+    },
+    {
+        "key": "GPL",
+        "name": "GNU GPLv3",
+        "notes": "Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license.",
+        "spdx_id": "GPL-3.0-only"
+    },
+    {
+        "key": "LGPL",
+        "name": "GNU LGPLv3",
+        "notes": "Permissions of this copyleft license are conditioned on making available complete source code of licensed works and modifications under the same license or the GNU GPLv3.",
+        "spdx_id": "LGPL-3.0-only"
+    },
+    {
+        "key": "MIT",
+        "name": "MIT License",
+        "notes": "A short and simple permissive license with conditions only requiring preservation of copyright and license notices.",
+        "spdx_id": "MIT"
+    },
+    {
+        "key": "APL",
+        "name": "Apache License 2.0",
+        "notes": "A permissive license whose main conditions require preservation of copyright and license notices.",
+        "spdx_id": "Apache-2.0"
+    },
+    {
+        "key": "MPL",
+        "name": "Mozilla Public License 2.0",
+        "notes": "Permissions of this weak copyleft license are conditioned on making available source code of licensed files and modifications of those files under the same license.",
+        "spdx_id": "MPL-2.0"
+    },
+    {
+        "key": "UCL",
+        "name": "Unity Companion License",
+        "notes": "For open-source projects created by Unity Technologies ApS.",
+        "spdx_id": "SEE LICENSE IN LICENSE.MD"
+    },
+    {
+        "key": "ASEULA",
+        "name": "Asset Store End User License Agreement",
+        "notes": "For assets purchased on the Unity Asset Store",
+        "spdx_id": "SEE LICENSE IN LICENSE.MD"
+    },
+    {
+        "key": "CC",
+        "name": "Creative Commons Attribution Non Commercial Share Alike 4.0 International",
+        "notes": "Requires attribution, cannot be used commercially, and must be released under the same license.",
+        "spdx_id": "CC-BY-NC-SA-4.0"
+    },
+    {
+        "key": "CCFREE",
+        "name": "Creative Commons Attribution Share Alike 4.0 International",
+        "notes": "Requires attribution and must be released under the same license.",
+        "spdx_id": "CC-BY-SA-4.0"
+    },
+    {
+        "key": "DUAL",
+        "name": "Dual licensing for forked projects",
+        "notes": "Two licenses because the project was forked - identifies a commit that will mark the transition.",
+        "spdx_id": "SEE LICENSE IN LICENSE.MD"
+    }
+]

@@ -1,9 +1,41 @@
-class License:
-    def __init__(self, key: str, spdx_id: str, name: str, notes: str):
-        self.key = key
-        self.spdx_id = spdx_id
-        self.name = name
-        self.notes = notes
+import json, os
+from typing import List
+
+from appapy.templating.choices import Author, Project, License, Technology
+
+projects = [
+    Project("koc", "Keepers of Creation", ""),
+]
+
+authors = [
+    Author("appa", "Appalachia Interactive", ""),
+    Author("amplify", "Amplify Creations, Lda", ""),
+    Author("aron-granberg", "Aron Granberg", ""),
+    Author("awesome-technologies", "Awesome Technologies", ""),
+    Author("dogmatic", "Dogmatic Games", ""),
+    Author("gurbu", "GurBu Technologies", ""),
+    Author("hapki", "Malte Hildingsson", ""),
+    Author("hendrik-haupt", "Hendrik Haupt", ""),
+    Author("jason-booth", "Jason Booth", ""),
+    Author("mob-sakai", "mob-sakai", ""),
+    Author("nature-manufacture", "Nature Manfuacture", ""),
+    Author("procedural-worlds", "Procedural Worlds", ""),
+    Author("qq_d_y", "Steven Gerrard", ""),
+    Author("rootmotion", "ROOTMOTION", ""),
+    Author("sandolkakos", "Marllon Vilano", ""),
+    Author("sirenix", "Sirenix IVS", ""),
+    Author("sycoforge-technogies", "Sycoforge Technologies", ""),
+    Author("terraincomposer", "TerrainComposer", ""),
+    Author("ultimate-game-tools", "Ultimate Game Tools", ""),
+    Author("unity", "Unity Technologies", ""),
+    Author("virtual-method", "Virtual Method", ""),
+]
+
+technologies = [
+    Technology("dotnet", "Microsoft.NET", ""),
+    Technology("python", "Python", ""),
+    Technology("unity3d", "Unity3D", ""),
+]
 
 licenses = [
     License(
@@ -80,4 +112,26 @@ licenses = [
     ),
 ]
 
-license_lookup = {license.key: license for license in licenses}
+
+def execute(args: List[str]):
+    directory = os.path.abspath(os.path.dirname(__file__))
+
+    projects_str = json.dumps(projects, default=vars, indent=4, sort_keys=True)
+    projects_path = os.path.join(directory, "projects.json")
+    with open(projects_path, mode="w") as fs:
+        fs.write(projects_str)
+
+    authors_str = json.dumps(authors, default=vars, indent=4, sort_keys=True)
+    authors_spath = os.path.join(directory, "authors.json")
+    with open(authors_spath, mode="w") as fs:
+        fs.write(authors_str)
+
+    technologies_str = json.dumps(technologies, default=vars, indent=4, sort_keys=True)
+    technologies_path = os.path.join(directory, "technologies.json")
+    with open(technologies_path, mode="w") as fs:
+        fs.write(technologies_str)
+
+    licenses_str = json.dumps(licenses, default=vars, indent=4, sort_keys=True)
+    licenses_path = os.path.join(directory, "licenses.json")
+    with open(licenses_path, mode="w") as fs:
+        fs.write(licenses_str)

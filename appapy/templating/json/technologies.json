@@ -1,0 +1,27 @@
+[
+    {
+        "key": "dotnet",
+        "name": "Microsoft.NET",
+        "notes": ""
+    },
+    {
+        "key": "python",
+        "name": "Python",
+        "notes": ""
+    },
+    {
+        "key": "unity3d",
+        "name": "Unity3D",
+        "notes": ""
+    },
+    {
+        "key": "node",
+        "name": "NodeJS",
+        "notes": ""
+    },
+    {
+        "key": "vscode",
+        "name": "VSCode",
+        "notes": ""
+    }
+]

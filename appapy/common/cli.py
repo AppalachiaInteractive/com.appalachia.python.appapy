@@ -119,7 +119,7 @@ def do_selection_until_confirmed(
         elif hasattr(option, "notes"):
             print(f"{Fore.BLUE}{option.notes}{Style.RESET_ALL}")
 
-        confirmation = do_ask(confirmation_message.format(option.key))
+        confirmation = do_ask(confirmation_message.format(option.name))
 
         if not confirmation:
             value = do_selection(opts, selection_message)
