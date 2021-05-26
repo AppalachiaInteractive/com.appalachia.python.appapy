@@ -32,6 +32,9 @@ elif args.command == 'packaging':
 elif args.command == 'publish':
     from appapy.packaging import publish
     publish.execute(args.subargs)
+elif args.command == 'imaging':
+    from appapy.imaging import main
+    main.execute(args.subargs)
 else:
     raise ValueError(args.command)
 

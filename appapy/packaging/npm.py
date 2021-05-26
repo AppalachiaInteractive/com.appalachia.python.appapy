@@ -84,7 +84,9 @@ class NPMPackage(Package):
         shell.run(f'npm --max-old-space-size=4096 publish "{package_path}" --registry \"{npm_registry}\"')
 
         file_args = self.get_gh_file_args(additional_files)
-            
+        
+        shell.run("git push")
+        
         version = self.json["version"]
         shell.run(
             f'gh release create v{version} \"{package_path}\" {file_args} -F RELEASELOG.md'

@@ -90,14 +90,14 @@ class Template(ABC):
         )
 
         license_file = os.path.join(
-            get_home(), license_dir, owner.key, f"LICENSE_{license_type}.md"
+            get_home(), license_dir, owner.key, f"LICENSE_{license_type}"
         )
 
         if DRY_RUN:
             print(license_file)
             return
 
-        shutil.copy(license_file, "LICENSE.md")
+        shutil.copy(license_file, "LICENSE")
 
     def post_execution(self, repo: Repository):
         pass
@@ -200,20 +200,20 @@ class TemplateUNITYPKGFRK(Template):
         )
 
         license_file = os.path.join(
-            get_home(), license_dir, owner.key, f"LICENSE_{repo.license.value}.md"
+            get_home(), license_dir, owner.key, f"LICENSE_{repo.license.value}"
         )
         license_file1 = os.path.join(
-            get_home(), license_dir, owner.key, f"LICENSE_{repo.license1.value}.md"
+            get_home(), license_dir, owner.key, f"LICENSE_{repo.license1.value}"
         )
         license_file2 = os.path.join(
-            get_home(), license_dir, "appa", f"LICENSE_{repo.license2.value}.md"
+            get_home(), license_dir, "appa", f"LICENSE_{repo.license2.value}"
         )
 
         if DRY_RUN:
             print(license_file)
             return
 
-        shutil.copy(license_file, "LICENSE.md")
+        shutil.copy(license_file, "LICENSE")
         shutil.copy(license_file1, "LICENSE.ORIGINAL.md")
         shutil.copy(license_file2, "LICENSE.UPDATED.md")
 

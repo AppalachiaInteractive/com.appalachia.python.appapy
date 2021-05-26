@@ -8,7 +8,7 @@ from appapy.common.cli import (
     do_parameter,
     do_selection_until_confirmed,
 )
-from appapy.common.constants import DRY_RUN, command_dir, common_dir
+from appapy.common.constants import DRY_RUN, command_dir, common_dirs
 from appapy.common.env import get_home
 from appapy.common.shell import run
 from appapy.templating.choices import ChoiceCollections
@@ -127,7 +127,7 @@ class TemplateProcessor:
 
             public = do_ask(f"{Fore.MAGENTA}Is this repository public?")
 
-            command = 'sh {0} "AppalachiaInteractive/{1}" {2} "{3}"'.format(
+            command = 'sh "{0}" "AppalachiaInteractive/{1}" {2} "{3}"'.format(
                 os.path.join(get_home(), command_dir, "repo", "init.sh"),
                 repo.package.value,
                 "public" if public else "private",
@@ -151,7 +151,11 @@ class TemplateProcessor:
     def copy_files(self, repo: Repository, template: Template):
         home = os.getenv("HOME")
 
-        for relative_walk_dir in [template.template_dir, common_dir]:
+        all_dirs = common_dirs.copy()
+        
+        all_dirs.extend([template.template_dir])
+        
+        for relative_walk_dir in all_dirs:
             print(f"{Fore.CYAN}[COPY FILES]: {Fore.YELLOW}{relative_walk_dir}")
 
             walk_dir = os.path.join(home, relative_walk_dir)

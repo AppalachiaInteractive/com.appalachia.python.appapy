@@ -45,13 +45,13 @@
         "key": "UCL",
         "name": "Unity Companion License",
         "notes": "For open-source projects created by Unity Technologies ApS.",
-        "spdx_id": "SEE LICENSE IN LICENSE.MD"
+        "spdx_id": "SEE LICENSE IN LICENSE"
     },
     {
         "key": "ASEULA",
         "name": "Asset Store End User License Agreement",
         "notes": "For assets purchased on the Unity Asset Store",
-        "spdx_id": "SEE LICENSE IN LICENSE.MD"
+        "spdx_id": "SEE LICENSE IN LICENSE"
     },
     {
         "key": "CC",
@@ -69,6 +69,6 @@
         "key": "DUAL",
         "name": "Dual licensing for forked projects",
         "notes": "Two licenses because the project was forked - identifies a commit that will mark the transition.",
-        "spdx_id": "SEE LICENSE IN LICENSE.MD"
+        "spdx_id": "SEE LICENSE IN LICENSE"
     }
 ]

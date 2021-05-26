@@ -82,13 +82,13 @@ licenses = [
     ),
     License(
         "UCL",
-        "SEE LICENSE IN LICENSE.MD",
+        "SEE LICENSE IN LICENSE",
         "Unity Companion License",
         "For open-source projects created by Unity Technologies ApS.",
     ),
     License(
         "ASEULA",
-        "SEE LICENSE IN LICENSE.MD",
+        "SEE LICENSE IN LICENSE",
         "Asset Store End User License Agreement",
         "For assets purchased on the Unity Asset Store",
     ),
@@ -106,7 +106,7 @@ licenses = [
     ),
     License(
         "DUAL",
-        "SEE LICENSE IN LICENSE.MD",
+        "SEE LICENSE IN LICENSE",
         "Dual licensing for forked projects",
         "Two licenses because the project was forked - identifies a commit that will mark the transition.",
     ),

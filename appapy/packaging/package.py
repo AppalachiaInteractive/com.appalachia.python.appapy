@@ -27,6 +27,10 @@ class Package(ABC):
             shell.run(f"bash {mods}")
 
         shell.run(f"git add .")
+        self.after_version()
+        
+    def after_version(self):
+        pass
 
     def changelog(self):
         home = get_home()
