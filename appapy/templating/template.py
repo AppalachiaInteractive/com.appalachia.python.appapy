@@ -36,6 +36,7 @@ class Template(ABC):
             repo.technologyid.value,
         ]
 
+
         for id, part in reversed(list(enumerate(library_parts))):
             if [e.lower() for e in replace_parts if e == part]:
                 library_parts.pop(id)
@@ -44,7 +45,14 @@ class Template(ABC):
             if part == "appa":
                 library_parts[id] = "appalachia"
 
-        repo.library.value = ".".join(library_parts).title()
+        initial_case = ".".join(library_parts)
+        title_case = initial_case.title()
+        repo.library.value = initial_case
+
+        for index in range(len(title_case)):
+            if repo.library.value[index].isupper() or title_case[index].isupper() or initial_case[index].isupper():
+                repo.library.value = repo.library.value[:index] + title_case[index].upper() + repo.library.value[index + 1:]
+
         repo.csnamespace.value = repo.library.value
 
     def generate_display_name(self, repo: Repository):
@@ -65,7 +73,7 @@ class Template(ABC):
 
     def get_package(self, repo: Repository):
 
-        package = ".".join([p for p in repo.path_parts if p != "appa"])
+        package = ".".join([p for p in repo.path_parts if p != "appa"]).lower()
 
         package = do_ask_until_confirmed(
             package,

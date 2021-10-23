@@ -6,7 +6,7 @@ from appapy.common import shell
 from appapy.common.cli import demarcate, note
 from appapy.common.constants import *
 from appapy.common.env import get_home
-from appapy.packaging.package import Package
+from appapy.packaging.types.package import Package
 from pynpm.package import NPMPackage as npmpackage
 
 
@@ -30,18 +30,25 @@ class NPMPackage(Package):
 
         
     def execute_version(self) -> None:    
-        if self.bump == 'current':            
+        if self.bump == 'existing':         
+            self.preversion()
+
+            self.refresh_package()        
+            version = self.json["version"]
+            return
+
+        elif self.bump == 'current':            
             self.preversion()
             
             self.refresh_package()        
             version = self.json["version"]
             
-            shell.run(f"git tag {version} && git push --tags")
+            shell.run(f"git tag {version} && git push -q --tags")
             self.version()
-            shell.run(f"git add . && git commit -m ${version} && git push")
+            shell.run(f"git add . && git commit -q -m ${version} && git push -q")
             self.postversion()
         else:
-            shell.run(f"npm version {self.bump}")
+            shell.run(f'npm version {self.bump}')
 
         self.refresh_package()
 
@@ -52,13 +59,20 @@ class NPMPackage(Package):
         os.mkdir(output_folder)
     
     def execute_package(self) -> Tuple[str, List[str]]:
-        cwd = os.getcwd()
-        dist_folder= os.path.join(cwd, output_folder)
-        os.chdir(dist_folder)
-        shell.run(f'npm pack ..')
-        os.chdir(cwd)
+           
+        if self.bump != 'existing':               
+            cwd = os.getcwd()
+            dist_folder= os.path.join(cwd, output_folder)
+            os.chdir(dist_folder)
+            shell.run(f'npm --quiet pack ..')
+            os.chdir(cwd)
 
-        package_path = self.get_package_path()
+        try:
+            package_path = self.get_package_path()
+        except ValueError:
+            self.bump = 'create'
+            return self.execute_package()
+
         return package_path, []
     
     def get_package_path(self):
@@ -81,11 +95,12 @@ class NPMPackage(Package):
         return file_args
                 
     def release(self, package_path: str, additional_files : List[str]):
-        shell.run(f'npm --max-old-space-size=4096 publish "{package_path}" --registry \"{npm_registry}\"')
+        package_path = f'./{package_path}'
+        shell.run(f'npm --quiet --registry {npm_registry} --max-old-space-size=4096 publish {package_path}')
 
         file_args = self.get_gh_file_args(additional_files)
         
-        shell.run("git push")
+        shell.run("git push -q")
         
         version = self.json["version"]
         shell.run(

@@ -1,6 +1,6 @@
 from appapy.common import shell
 from appapy.common.cli import demarcate, note
-from appapy.packaging.npm import NPMPackage
+from appapy.packaging.types.npm import NPMPackage
 
 
 class Node(NPMPackage):

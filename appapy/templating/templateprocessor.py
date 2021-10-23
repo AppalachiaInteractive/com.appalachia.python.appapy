@@ -218,6 +218,11 @@ class TemplateProcessor:
         absolute = os.path.abspath(repo.directory.value)
         package = (
             absolute.replace(home, "")
+            .replace("C:\\", "")
+            .replace("D:\\", "")
+            .replace("E:\\", "")
+            .replace("F:\\", "")
+            .replace("G:\\", "")
             .replace("Assets", "")
             .replace("Editor", "")
             .replace("Library", "")
@@ -239,8 +244,9 @@ class TemplateProcessor:
 
         parts = package.split(".")
         for part in parts:
-            if part in repo.path_parts:
+            if part.lower() in repo.path_parts_lower:
                 continue
+            repo.path_parts_lower.append(part.lower())
             repo.path_parts.append(part)
 
     def confirm_execution(self, repo: Repository, template: Template):
@@ -266,17 +272,34 @@ class TemplateProcessor:
 
         self.token_keys = [prop.key for prop in repo.tokenized_properties]
         self.token_lookup = {prop.key: prop for prop in repo.tokenized_properties}
+        
+        excluded_extensions = [".meta", ".asset",".cs",
+                               ".jpg",".jpeg",".png",".bmp","gif",".hdr",".exr",".tif",".tiff",".tga",
+                               ".doc",".docx",".xlsx",".pdf",
+                               ".wav",".mp3",".flac",
+                               ".zip",".gz",".tar",".7z"
+                               ]
 
         for dir_path, dir_names, file_names in os.walk(repo.directory.value):
             for file_name in file_names:
-
+                
                 token_file_path = os.path.join(dir_path, file_name)
 
                 print(token_file_path)
                 if not os.path.isfile(token_file_path):
                     print(f"Missing {token_file_path}")
                     continue
+                
+                skipping = False
+                for extension in excluded_extensions:                    
+                    if token_file_path.endswith(extension):                        
+                        skipping = True
+                        print(f"Skipping {extension} file [{token_file_path}]...")
+                        break
 
+                if skipping:
+                    continue
+                
                 print(f"Replacing tokens for [{token_file_path}]...")
 
                 if DRY_RUN:
@@ -296,15 +319,21 @@ class TemplateProcessor:
                 lines = []
                 try:
                     with open(new_file_path, mode="r", encoding="utf-8") as fs:
+                        any = False
                         for line in fs:
+                            
                             for token in repo.tokenized_properties:
-                                line = token.replace(line)
+                                if (token.ispresent(line)):
+                                    any = True
+                                    line = token.replace(line)
 
                             lines.append(line)
 
-                    with open(new_file_path, mode="w") as fs:
-                        fs.write("".join(lines))
+                    if any:
+                        with open(new_file_path, mode="w") as fs:
+                            fs.write("".join(lines))
                 except UnicodeError as ue:
+                    print(ue)
                     pass
 
         print("Token replacement completed.")

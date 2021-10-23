@@ -3,11 +3,11 @@ from argparse import ArgumentError
 from typing import List
 
 from appapy.common.cli import *
-from appapy.packaging.generic import Generic
-from appapy.packaging.node import Node
-from appapy.packaging.package import Package
-from appapy.packaging.unity3d import Unity3D
-from appapy.packaging.vscode import VSCode
+from appapy.packaging.types.generic import Generic
+from appapy.packaging.types.node import Node
+from appapy.packaging.types.package import Package
+from appapy.packaging.types.unity3d import Unity3D
+from appapy.packaging.types.vscode import VSCode
 from colorama.ansi import Fore
 
 

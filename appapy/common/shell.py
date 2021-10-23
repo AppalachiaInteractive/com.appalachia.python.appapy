@@ -8,6 +8,7 @@ def run(command: str):
     subprocess.run(command, shell=True, check=True)
 
 def run_and_read(command: str) -> str:
+    print()
     print(f"{Fore.CYAN}Executing: {Fore.YELLOW}[{command}]{Fore.RESET}")
     p = subprocess.run(command, shell=True, check=True,stdout=subprocess.PIPE)
     out = str(p.stdout)

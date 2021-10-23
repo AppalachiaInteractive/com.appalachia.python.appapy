@@ -14,7 +14,7 @@ class Package(ABC):
 
     def preversion(self):
         demarcate("[PREVERSION]")
-        shell.run("git fetch -p && git pull && git fetch --tags -f && git pull --tags && git push --tags")
+        shell.run("git fetch -q -p && git pull -q && git fetch -q --tags -f && git pull -q --tags && git push -q --tags")
 
     def version(self):
         demarcate("[VERSION]")

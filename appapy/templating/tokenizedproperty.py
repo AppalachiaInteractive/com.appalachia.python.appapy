@@ -23,3 +23,6 @@ class TokenizedProperty:
         new = self.value
         line = line.replace(old, new)
         return line
+
+    def ispresent(self, line:str) -> bool:
+        return f"!!{self.key}!!" in line

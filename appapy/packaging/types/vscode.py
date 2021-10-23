@@ -5,7 +5,7 @@ from typing import List, Tuple
 from appapy.common import shell
 from appapy.common.cli import demarcate, note
 from appapy.common.constants import *
-from appapy.packaging.npm import NPMPackage
+from appapy.packaging.types.npm import NPMPackage
 
 
 class VSCode(NPMPackage):

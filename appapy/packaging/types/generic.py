@@ -1,4 +1,4 @@
-from appapy.packaging.package import Package
+from appapy.packaging.types.package import Package
 
 
 class Generic(Package):

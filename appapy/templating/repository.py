@@ -65,3 +65,4 @@ class Repository:
             prop.key: prop for prop in self.tokenized_properties
         }
         self.path_parts: List[str] = []
+        self.path_parts_lower: List[str] = []
