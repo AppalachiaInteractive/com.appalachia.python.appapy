@@ -3,17 +3,18 @@ import shutil
 from abc import ABC
 from typing import Dict, List
 
-import git
 from appapy.common import shell
 from appapy.common.cli import *
 from appapy.common.constants import *
 from appapy.common.env import get_home
+from appapy.templating.args import Args
 from appapy.templating.choices import ChoiceCollections
 from appapy.templating.constants import *
 from appapy.templating.owner import *
 from appapy.templating.repository import Repository
 from appapy.templating.utils import *
 from colorama import Back, Fore, Style
+import git
 
 
 class Template(ABC):
@@ -23,7 +24,7 @@ class Template(ABC):
         self.template_dir = template_dir
         self.generator = generator
 
-    def pre_confirm(self, repo: Repository) -> None:
+    def pre_confirm(self, repo: Repository, args: Args) -> None:
         pass
 
     def extract_library(self, repo: Repository):
@@ -36,14 +37,17 @@ class Template(ABC):
             repo.technologyid.value,
         ]
 
-
         for id, part in reversed(list(enumerate(library_parts))):
             if [e.lower() for e in replace_parts if e == part]:
                 library_parts.pop(id)
 
+        repo.thirdparty = False
+
         for id, part in enumerate(library_parts):
             if part == "appa":
                 library_parts[id] = "appalachia"
+            if part == "third-party":
+                repo.thirdparty = True
 
         initial_case = ".".join(library_parts)
         title_case = initial_case.title()
@@ -53,15 +57,44 @@ class Template(ABC):
             if repo.library.value[index].isupper() or title_case[index].isupper() or initial_case[index].isupper():
                 repo.library.value = repo.library.value[:index] + title_case[index].upper() + repo.library.value[index + 1:]
 
-        repo.csnamespace.value = repo.library.value
+        repo.csnamespace.value = self.fix_third_party(repo.library.value)
+
+    def fix_third_party(self, value):
+        return value.replace('Appalachia.Third-Party.', '')
 
     def generate_display_name(self, repo: Repository):
-        if repo.projectid.value == "":
-            repo.display.value = f"{repo.library.value} for {repo.technology.value}"
-        else:
-            repo.display.value = f"{repo.project.value}: {repo.library.value} for {repo.technology.value}"
+        display = self.fix_third_party(repo.library.value)
+        no_project = repo.projectid.value == ""
 
-    def get_display_name(self, repo: Repository):
+        basic = f"{display} for {repo.technology.value}"
+        basic_project = f"{basic} ({repo.project.value})"
+        named = f"{repo.technology.value} Assets by {display}"
+        named_project = f"{named} ({repo.project.value})"
+        unity_named = f"Packages by Unity Technologies"
+        unity_named_project = f"{named} ({repo.project.value})"
+
+        if repo.ownerid == "appa":            
+            if no_project:
+                repo.display.value = basic
+            else:
+                repo.display.value = basic_project
+        elif repo.ownerid.value == "unity":
+            if no_project:
+                repo.display.value = named
+            else:
+                repo.display.value = named_project
+        elif repo.ownerid.value == "assets":
+            if no_project:
+                repo.display.value = named
+            else:
+                repo.display.value = named_project
+        else:
+            if no_project:
+                repo.display.value = basic
+            else:
+                repo.display.value = basic_project
+
+    def get_display_name(self, repo: Repository, args: Args):
         self.generate_display_name(repo)
 
         repo.display.value = do_ask_until_confirmed(
@@ -69,9 +102,10 @@ class Template(ABC):
             repo.display.confirmation_message,
             repo.display.enter_message,
             repo.display.enter_validation,
+            args.autodisplayname
         )
 
-    def get_package(self, repo: Repository):
+    def get_package(self, repo: Repository, args: Args):
 
         package = ".".join([p for p in repo.path_parts if p != "appa"]).lower()
 
@@ -80,6 +114,7 @@ class Template(ABC):
             repo.package.confirmation_message,
             repo.package.enter_message,
             repo.package.enter_validation,
+            args.autopackage
         )
 
         if len(package) < 8:
@@ -94,7 +129,7 @@ class Template(ABC):
             return
 
         print(
-            f"{Fore.CYAN}Updating license to use {Fore.YELLOW}{0}".format(license_type)
+            f"{Fore.CYAN}Updating license to use {Fore.YELLOW}{license_type}"
         )
 
         license_file = os.path.join(
@@ -134,7 +169,7 @@ class TemplateUNITYPKG(Template):
             f"{root_dir}/appa/templates/com.appalachia.unity3d.package",
         )
 
-    def pre_confirm(self, repo: Repository) -> None:
+    def pre_confirm(self, repo: Repository, args: Args) -> None:
         repo.tokenized_properties.append(repo.csnamespace)
 
         repo.csnamespace.value = do_ask_until_confirmed(
@@ -142,6 +177,7 @@ class TemplateUNITYPKG(Template):
             repo.csnamespace.confirmation_message,
             repo.csnamespace.enter_message,
             repo.csnamespace.enter_validation,
+            args.autonamespace
         )
 
     def post_execution(self, repo: Repository):        

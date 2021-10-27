@@ -38,6 +38,7 @@ elif args.command == 'packaging':
     main.execute(args.subargs)
 elif args.command == 'version':
     from appapy.packaging import version
+    version.execute(args.subargs)
 elif args.command == 'publish':
     from appapy.packaging import publish
     publish.execute(args.subargs)

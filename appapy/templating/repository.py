@@ -39,6 +39,7 @@ class Repository:
         self.csnamespace = TokenizedProperty(
             "csnamespace", "C# Root Namespace", no_validation
         )
+        self.thirdparty = False
 
         self.tokenized_properties = [
             self.owner,

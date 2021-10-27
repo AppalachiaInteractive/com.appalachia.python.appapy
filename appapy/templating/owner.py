@@ -74,9 +74,9 @@ class UnityAssetStore(Owner):
 
 owners: List[Owner] = [
     AppalachiaInteractive(),
-    ThirdParty(),
     UnityTechnologies(),
     UnityAssetStore(),
+    ThirdParty(),
 ]
 
 owner_lookup = {owner.key: owner for owner in owners}

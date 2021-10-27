@@ -5,6 +5,11 @@
         "notes": ""
     },
     {
+        "key": "unity",
+        "name": "Unity Technologies",
+        "notes": ""
+    },
+    {
         "key": "amplify",
         "name": "Amplify Creations, Lda",
         "notes": ""
@@ -15,7 +20,17 @@
         "notes": ""
     },
     {
+        "key": "arongranberg",
+        "name": "Aron Granberg",
+        "notes": ""
+    },
+    {
         "key": "awesome-technologies",
+        "name": "Awesome Technologies",
+        "notes": ""
+    },
+    {
+        "key": "awesometechnologies",
         "name": "Awesome Technologies",
         "notes": ""
     },
@@ -40,7 +55,17 @@
         "notes": ""
     },
     {
+        "key": "hendrikhaupt",
+        "name": "Hendrik Haupt",
+        "notes": ""
+    },
+    {
         "key": "jason-booth",
+        "name": "Jason Booth",
+        "notes": ""
+    },
+    {
+        "key": "jasonbooth",
         "name": "Jason Booth",
         "notes": ""
     },
@@ -51,11 +76,21 @@
     },
     {
         "key": "nature-manufacture",
-        "name": "Nature Manfuacture",
+        "name": "NatureManfuacture",
+        "notes": ""
+    },
+    {
+        "key": "naturemanufacture",
+        "name": "NatureManfuacture",
         "notes": ""
     },
     {
         "key": "procedural-worlds",
+        "name": "Procedural Worlds",
+        "notes": ""
+    },
+    {
+        "key": "proceduralworlds",
         "name": "Procedural Worlds",
         "notes": ""
     },
@@ -80,8 +115,18 @@
         "notes": ""
     },
     {
+        "key": "sycoforgetechnogies",
+        "name": "Sycoforge Technologies",
+        "notes": ""
+    },
+    {
         "key": "sycoforge-technogies",
         "name": "Sycoforge Technologies",
+        "notes": ""
+    },
+    {
+        "key": "terrain-composer",
+        "name": "TerrainComposer",
         "notes": ""
     },
     {
@@ -90,18 +135,23 @@
         "notes": ""
     },
     {
+        "key": "ultimategametools",
+        "name": "Ultimate Game Tools",
+        "notes": ""
+    },
+    {
         "key": "ultimate-game-tools",
         "name": "Ultimate Game Tools",
         "notes": ""
     },
     {
-        "key": "unity",
-        "name": "Unity Technologies",
+        "key": "virtualmethod",
+        "name": "VirtualMethod",
         "notes": ""
     },
     {
         "key": "virtual-method",
-        "name": "Virtual Method",
+        "name": "VirtualMethod",
         "notes": ""
     }
 ]
