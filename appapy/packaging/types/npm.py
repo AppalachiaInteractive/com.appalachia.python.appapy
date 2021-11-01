@@ -27,10 +27,9 @@ class NPMPackage(Package):
         self.refresh_package()        
         version = self.json["version"]
         shell.run(f"bash {home}/com.appalachia/appa/appa.sh docs releaselog {version}")
-
         
     def execute_version(self) -> None:    
-        if self.bump == 'existing':         
+        """ if self.bump == 'existing':
             self.preversion()
 
             self.refresh_package()        
@@ -48,7 +47,9 @@ class NPMPackage(Package):
             shell.run(f"git add . && git commit -q -m ${version} && git push -q")
             self.postversion()
         else:
-            shell.run(f'npm version {self.bump}')
+            shell.run(f'npm version {self.bump}') """
+
+        shell.run(f'npm version {self.bump}')
 
         self.refresh_package()
 
@@ -63,6 +64,10 @@ class NPMPackage(Package):
         if self.bump != 'existing':               
             cwd = os.getcwd()
             dist_folder= os.path.join(cwd, output_folder)
+
+            if (not os.path.isdir(dist_folder)):
+                os.mkdir(dist_folder)
+
             os.chdir(dist_folder)
             shell.run(f'npm --quiet pack ..')
             os.chdir(cwd)

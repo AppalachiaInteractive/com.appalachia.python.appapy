@@ -46,9 +46,11 @@ def execute(args: List[str]):
 
     package_path, additional_files = package.execute_package()
     
+    package_path = package_path.replace("\\", "/")
+
     if package_path != '':
         package.release(package_path, additional_files)
         
-    package.execute_version()
+    # package.execute_version()
     
     celebrate(f"{tech} publish successful!")

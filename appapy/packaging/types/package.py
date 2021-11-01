@@ -19,14 +19,6 @@ class Package(ABC):
     def version(self):
         demarcate("[VERSION]")
 
-        self.changelog()
-        self.releaselog()
-
-        mods = "modifications.sh"
-        if os.path.isfile(mods):
-            shell.run(f"bash {mods}")
-
-        shell.run(f"git add .")
         self.after_version()
         
     def after_version(self):
@@ -45,6 +37,15 @@ class Package(ABC):
 
     def prepack(self):
         demarcate("[PREPACK]")
+        
+        self.changelog()
+        self.releaselog()
+
+        mods = "modifications.sh"
+        if os.path.isfile(mods):
+            shell.run(f"bash {mods}")
+
+        shell.run("git add . && git commit -m \"Updating changelog and releaselog\" && git push -q")
 
     def package(self):
         demarcate("[PACKAGE]")
