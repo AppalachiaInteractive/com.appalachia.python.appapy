@@ -42,9 +42,12 @@ elif args.command == 'packaging':
 elif args.command == 'version':
     from appapy.packaging import version
     version.execute(args.subargs)
+elif args.command == 'package':
+    from appapy.packaging import publish
+    publish.execute(args.subargs, False)
 elif args.command == 'publish':
     from appapy.packaging import publish
-    publish.execute(args.subargs)
+    publish.execute(args.subargs, True)
 elif args.command == 'imaging':
     from appapy.imaging import main
     main.execute(args.subargs)

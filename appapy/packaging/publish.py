@@ -11,7 +11,7 @@ from appapy.packaging.types.vscode import VSCode
 from colorama import Fore
 
 
-def execute(args: List[str]):
+def execute(args: List[str], alsoPublish: bool):
 
     if len(args) != 0:
         raise ArgumentError(args, "No arguments needed!")
@@ -48,7 +48,7 @@ def execute(args: List[str]):
     
     package_path = package_path.replace("\\", "/")
 
-    if package_path != '':
+    if alsoPublish and package_path != '':
         package.release(package_path, additional_files)
         
     # package.execute_version()
