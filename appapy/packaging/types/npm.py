@@ -101,13 +101,35 @@ class NPMPackage(Package):
                 
     def release(self, package_path: str, additional_files : List[str]):
         package_path = f'./{package_path}'
-        shell.run(f'npm --quiet --registry {npm_registry} --max-old-space-size=4096 publish {package_path}')
+
+        name = self.json["name"]
+        version = self.json["version"]
+
+        npmpfx=f'npm --quiet --registry {npm_registry}'
+        try:
+            shell.run(f'{npmpfx} unpublish \"{name}@{version}\"')
+        except:
+            pass
+
+        shell.run(f'{npmpfx} --max-old-space-size=4096 publish \"{package_path}\"')
 
         file_args = self.get_gh_file_args(additional_files)
         
-        shell.run("git push -q")
+        tag = f'v{version}'
+
+        shell.run(f'git push -q')
+        shell.run(f'git fetch -q --tags -f && git pull -q --tags && git push -q --tags')
+                
+        try:
+            shell.run(f'git tag -d {tag}')
+        except:
+            pass
+
+        shell.run(f'git push origin :refs/tags/{tag}')
+
+        try:
+            shell.run(f'gh release delete {tag} -y')
+        except:
+            pass
         
-        version = self.json["version"]
-        shell.run(
-            f'gh release create v{version} \"{package_path}\" {file_args} -F RELEASELOG.md'
-        )
+        shell.run(f'gh release create {tag} \"{package_path}\" {file_args} -F RELEASELOG.md')
