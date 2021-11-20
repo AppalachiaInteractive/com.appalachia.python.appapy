@@ -81,10 +81,12 @@ class NPMPackage(Package):
         return package_path, []
     
     def get_package_path(self):
+        version = self.json["version"]
+        
         package_path = ""
         for dir_path, dir_names, file_names in os.walk(output_folder):
             for file_name in file_names:
-                if file_name.endswith("tgz"):
+                if (version in file_name) and (file_name.endswith("tgz")):
                     package_path = os.path.join(dir_path, file_name)
                     break
 
