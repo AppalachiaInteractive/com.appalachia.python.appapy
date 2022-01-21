@@ -153,6 +153,7 @@ def do_ask_until_confirmed(
         confirmation = do_ask(confirmation_message.format(value), confirmation)
         if not confirmation:
             value = do_parameter(enter_message, enter_validation)
+            confirmation = None
 
     return value
 
